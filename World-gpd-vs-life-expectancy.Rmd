@@ -9,13 +9,12 @@ output: ioslides_presentation
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Appication Overview
+## App Overview and Function
 The app will visualize the World's GDP vs. Life Expentance for all the countries in different years using the Gapminder datasets.
 
 The app has been developed using Shiny application from RStudio. The source code of the application can be found here.
 
-## Function of Application
-The app is a web application that is used to visualize the World's GDP vs. Life Expectancy. The applicaton allows the users to:
+The applicaton allows the users to:
 
 - Plot the data in a scatter plot (GDP vs. Life Expectancy)
 - Create a set of parameters, such as year and continent, for data visualization.
@@ -24,10 +23,119 @@ The app is a web application that is used to visualize the World's GDP vs. Life 
 - Download the data
 
 ## Application Interface
-The is the main appliction interface.
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(shiny)
+library(shinycustomloader)
+library(colourpicker)
+library(ggplot2)
+library(plotly)
+library(gapminder)
 
-```{r, echo=TRUE, out.width='100%'}
-knitr::include_graphics("./Images/myLittleShinyApp Interface.png")
+
+shinyApp(
+
+  # Define UI for application that draws a histogram
+  shinyUI(fluidPage(
+    
+    # Application title
+    titlePanel("World's GDP and Life Expectancy"),
+    
+    # Sidebar with a slider input for number of bins
+    sidebarLayout(
+      sidebarPanel(
+        
+        textInput("title", "Title (for the graph)", "GDP vs. life exp"),
+        
+        selectInput("year", "Year",
+                    choices = c("All", unique(gapminder$year))),
+        
+        selectInput("continent", "Continent",
+                    choices = c("All", levels(gapminder$continent))),
+        
+        sliderInput(inputId = "life", label = "Life expectancy",
+                    min = 0, max = 120,
+                    value = c(40, 90)),
+        
+        numericInput("size", "Point size", 1, 1),
+        
+        colourInput("color", "Point color", value = "#0934ab"),
+        
+        downloadButton("download_data")
+        
+      ),
+      
+      # Show a plot of the generated distribution
+      mainPanel(
+        
+        # Output: Tabset with plot, summary, and table
+        tabsetPanel(type = "tabs",
+                    
+                    tabPanel("Graph", withLoader(plotlyOutput("plot")) ),
+                    tabPanel("Table", withLoader(DT::dataTableOutput("table")))
+        )
+      )
+    )
+  )),
+  
+  # Define server logic required to draw a histogram
+  shinyServer(function(input, output) {
+    
+    filtered_data <- reactive({
+      data <- gapminder
+      data <- subset(
+        data,
+        lifeExp >= input$life[1] & lifeExp <= input$life[2]
+      )
+      
+      if (input$continent != "All") {
+        data <- subset(
+          data,
+          continent == input$continent
+        )
+      }
+      
+      if(input$year != "All"){
+        data <-subset(
+          data,
+          year == input$year
+        )
+      }
+      
+      data
+    })
+    
+    output$table <- DT::renderDataTable({
+      data <- filtered_data()
+      data
+    })
+    
+    output$download_data <- downloadHandler(
+      filename = function() {
+        paste("gapminder-exported-data-", Sys.Date(), ".csv", sep="")
+      },
+      content = function(file) {
+        write.csv(filtered_data(), file)
+      }
+    )
+    
+    output$plot <- renderPlotly({
+      
+      ggplotly({
+        data <- filtered_data()
+        
+        p <- ggplot(data, aes(gdpPercap, lifeExp)) +
+          geom_point(size = input$size, col = input$color) +
+          scale_x_log10() +
+          ggtitle(input$title) +
+          geom_hline(yintercept = mean(data$lifeExp), color="red")
+        
+        p
+      })
+    })
+  })
+
+
+)
 ```
 
 ## Application Interface Details
