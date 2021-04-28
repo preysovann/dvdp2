@@ -1,0 +1,46 @@
+---
+title: "User Guide"
+author: "Sovann Prey"
+date: "4/28/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Application User Guide
+
+## App Overview and Function
+The app will visualize the World's GDP vs. Life Expentance for all the countries in different years using the Gapminder datasets.
+
+The app has been developed using Shiny application from RStudio. The source code of the application can be found here.
+
+The applicaton allows the users to:
+
+- Plot the data in a scatter plot (GDP vs. Life Expectancy)
+- Create a set of parameters, such as year and continent, for data visualization.
+- Customize data visualization.
+- Generate a table for the data
+- Download the data
+
+## Application Interface
+The web app contains two sections: configuration and visualization part.
+
+- **Configuration**: allows the users to filter the data and configure visualization of the data.
+- **Visualization**: allows the users to see the (filtered) data being visualized in the form of graph/plot and table.
+
+## Application Interface Details
+```{r, echo=FALSE, out.width='90%'}
+knitr::include_graphics("myLittleShinyApp Interface.png")
+```
+
+Source code of the webapp can be found [here](https://github.com/preysovann/dvdp2/tree/master/myLittleShinyApp).
+
+## Gapminder Datasets
+The application is based on the [Gapminder](https://cran.r-project.org/web/packages/gapminder/README.html) datasets.
+
+```{r, echo=TRUE, warning=FALSE}
+library(gapminder)
+str(gapminder)
+```
