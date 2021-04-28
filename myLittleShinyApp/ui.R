@@ -52,7 +52,9 @@ shinyUI(fluidPage(
             tabsetPanel(type = "tabs",
                         
                         tabPanel("Graph", withLoader(plotlyOutput("plot")) ),
-                        tabPanel("Table", withLoader(DT::dataTableOutput("table")))
+                        tabPanel("Table", withLoader(DT::dataTableOutput("table"))),
+                        tabPanel("User Guide", HTML(markdown::markdownToHTML(knit("user_guide.Rmd"))))
+                        
             )
         )
     )
