@@ -13,6 +13,7 @@ library(colourpicker)
 library(ggplot2)
 library(plotly)
 library(gapminder)
+library(knitr)
 
 
 # Define UI for application that draws a histogram
