@@ -1,7 +1,7 @@
 ---
 title: "World's GDP Vs. Life Expectancy"
 author: "Sovann Prey"
-date: "4/26/2021"
+date: "2021-04-26"
 output: ioslides_presentation
 ---
 
