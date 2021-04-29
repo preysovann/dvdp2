@@ -33,7 +33,7 @@ The web app contains two sections: configuration and visualization part.
 knitr::include_graphics("./Images/myLittleShinyApp Interface.png")
 ```
 
-Click this [link]() to access the web app. Source code is [here](https://github.com/preysovann/dvdp2/tree/master/myLittleShinyApp).
+Click this [link](https://sovann.shinyapps.io/myLittleShinyApp/) to access the web app. Source code is [here](https://github.com/preysovann/dvdp2/tree/master/myLittleShinyApp).
 
 ## Gapminder Datasets
 The application is based on the [Gapminder](https://cran.r-project.org/web/packages/gapminder/README.html) datasets.
